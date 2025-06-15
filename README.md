@@ -21,3 +21,19 @@ Aplikasi web ini memiliki beberapa tampilan utama yang mendukung pengelolaan dan
 - **Halaman Manajemen Berita**: Termasuk halaman untuk membuat, mengedit, dan menghapus berita.
 
 Tampilan antarmuka menggunakan **Tailwind CSS** untuk memastikan responsivitas dan kemudahan penggunaan pada berbagai perangkat. Struktur layout dibangun dengan menggunakan Blade templates Laravel, dengan komponen navigasi seperti navbar dan sidebar untuk memudahkan navigasi antar halaman.
+
+## Gambar Tampilan Web
+
+Berikut adalah beberapa gambar yang menggambarkan tampilan utama aplikasi web:
+
+### Dashboard Admin
+![Dashboard Admin](public/images/Admin.png)
+
+### Daftar Berita Publik
+![Daftar Berita Publik](public/images/DaftarBeritaPublik.png)
+
+### Detail Berita
+![Detail Berita](public/images/DetailBerita.png)
+
+### Manajemen Berita
+![Manajemen Berita](public/images/ManajemenBerita.png)
