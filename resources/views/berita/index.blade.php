@@ -19,6 +19,14 @@
                 </button>
             </div>
         @endif
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        @endif
 
         <table class="table table-bordered table-striped">
             <thead>
@@ -43,7 +51,6 @@
                         <td>{{ $item->kategori->nama_kategori }}</td>
                         <td>{{ $item->user->name }}</td>
                         <td>
-                            {{-- BAGIAN INI MENAMPILKAN LABEL STATUS --}}
                             @if ($item->status == 'published')
                                 <span class="badge badge-success">Published</span>
                             @else
@@ -51,22 +58,44 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            {{-- BAGIAN INI MENAMPILKAN TOMBOL APPROVE SECARA KONDISIONAL --}}
-                            @if (Auth::user()->role == 'editor' && $item->status == 'draft')
-                                <form action="{{ route('berita.approve', $item->id) }}" method="POST" class="d-inline">
+                            {{-- ============================================= --}}
+                            {{-- KODE DEBUGGING - HAPUS SETELAH SELESAI --}}
+                            {{-- ============================================= --}}
+                            <div style="border: 1px dashed red; padding: 5px; margin-bottom: 10px; text-align: left;">
+                                <p class="mb-0"><strong>Role saat ini:</strong> {{ Auth::user()->role }}</p>
+                                <p class="mb-0"><strong>Apakah Editor?</strong> 
+                                    @can('is-editor') 
+                                        <span class="badge badge-success">YA</span>
+                                    @else
+                                        <span class="badge badge-danger">TIDAK</span>
+                                    @endcan
+                                </p>
+                                <p class="mb-0"><strong>Status Berita:</strong> {{ $item->status }}</p>
+                            </div>
+                            <hr>
+                            {{-- ============================================= --}}
+                            {{-- Kode Asli --}}
+                            {{-- ============================================= --}}
+
+                            @can('is-editor')
+                                @if($item->status == 'draft')
+                                    <form action="{{ route('berita.approve', $item->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                    </form>
+                                @endif
+                            @endcan
+
+                            @if(Gate::allows('is-admin') || Gate::allows('is-editor'))
+                                <a href="{{ route('berita.edit', $item->id) }}" class="btn btn-info btn-sm">Edit</a>
+                                
+                                <form action="{{ route('berita.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">
                                     @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                                 </form>
                             @endif
-
-                            <a href="{{ route('berita.edit', $item->id) }}" class="btn btn-info btn-sm">Edit</a>
-                            
-                            <form action="{{ route('berita.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                            </form>
                         </td>
                     </tr>
                 @empty

@@ -11,11 +11,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Ini adalah baris yang Anda tambahkan
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
         ]);
     })
+    // =======================================================
+    // TAMBAHKAN ATAU EDIT BAGIAN INI
+    // =======================================================
+    ->withProviders([
+        App\Providers\AuthServiceProvider::class, // <-- Tambahkan baris ini
+    ])
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
